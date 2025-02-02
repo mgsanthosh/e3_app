@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
     if (email.isNotEmpty && password.isNotEmpty) {
-      User? user = await _authService.signUpWithEmail(email, password);
+      User? user = await _authService.signUpWithEmail(email, password, "ADMIN");
       if (user != null) {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
       }
@@ -121,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: GestureDetector(
                   onTap: () {
                     // Navigate to Signup Screen
+                    _signUp();
                   },
                   child: Text(
                     "Don't have an account? Sign Up",
