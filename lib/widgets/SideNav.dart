@@ -7,8 +7,8 @@ import '../utils/permissions.dart';
 class SideNav extends StatelessWidget {
   final String role;
   final User user;
-
-  SideNav({required this.role, required this.user});
+  final Function(String) onMenuSelected;
+  SideNav({required this.role, required this.user, required this.onMenuSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +41,8 @@ class SideNav extends StatelessWidget {
           title: Text(subItem["name"]),
           onTap: () {
             // Handle navigation here
+            onMenuSelected(subItem["name"]); // Call callback with selected menu
+            Navigator.pop(context); // Close drawer
           },
         ))
             .toList(),
@@ -51,6 +53,8 @@ class SideNav extends StatelessWidget {
         title: Text(item["name"]),
         onTap: () {
           // Handle navigation here
+          onMenuSelected(item["name"]); // Call callback with selected menu
+          Navigator.pop(context); // Close drawer
         },
       );
     }

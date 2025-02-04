@@ -1,22 +1,23 @@
+import 'package:flutter/cupertino.dart';
+
 List<dynamic> getUserPermissions(String role) {
   if (role == "ADMIN") {
     return [
       {
-        "name":"Dashboard"
+        "name":"Dashboard",
       },
       {
         "name": "Master Data",
         "options": [
-          {
-            "name": "Locations"
-          },
           {
             "name": "Countries"
           },
           {
             "name": "Regions"
           },
-
+          {
+            "name": "Locations"
+          },
           {
             "name":"Profile"
           }
@@ -103,5 +104,25 @@ List<dynamic> getUserPermissions(String role) {
         "name":"ESG Audit"
       }
     ];
+  }
+}
+
+void navigateToScreen(BuildContext context, String screenName) {
+  Map<String, String> routeMapping = {
+    "Dashboard": "/dashboard",
+    "Master Data": "/master_data",
+    "User Management": "/user_management",
+    "Locations": "/master_data",
+    "Countries": "/master_data",
+    "Regions": "/master_data",
+    "Departments": "/user_management",
+    "Users": "/user_management",
+    "Roles": "/user_management",
+    "ESG Audit": "/esg_audit",
+  };
+
+  String? route = routeMapping[screenName];
+  if (route != null) {
+    Navigator.pushNamed(context, route);
   }
 }
