@@ -16,9 +16,7 @@ List<dynamic> getUserPermissions(String role) {
           {
             "name": "Regions"
           },
-          {
-            "name":"Standards"
-          },
+
           {
             "name":"Profile"
           }
