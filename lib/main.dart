@@ -1,3 +1,4 @@
+import 'package:e3_app/screens/Dashboard.dart';
 import 'package:e3_app/screens/HomeScreen.dart';
 import 'package:e3_app/screens/LoginScreen.dart';
 import 'package:e3_app/screens/SplashScreen.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/login": (context) => LoginScreen(),
         "/home": (context) => HomeScreen(),
+        '/dashboard': (context) => DashboardScreen(),
       },
     );
   }
