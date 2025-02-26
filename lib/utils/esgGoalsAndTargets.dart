@@ -57,18 +57,23 @@ List<dynamic> getAddGoalForm() {
       "section": "Basic",
       "inputs": [
         {
-          "type": "radio",
-          "options": ["Measurable", "NonMeasurable"]
+          "type": "dropdown",
+          "Placeholder": "Select Type",
+          "fromFirebase": false,
+          "options": ["Measurable", "NonMeasurable"],
+          "value": "Measurable"
         },
         {
           "type": "text",
-          "Placeholder": "Description"
+          "Placeholder": "Description",
+          "value": "description"
         },
         {
           "type": "dropdown",
           "Placeholder": "Department",
           "fromFirebase": true,
-          "databaseName": "departments"
+          "databaseName": "departments",
+          "value": "departments"
         }
       ]
     },
@@ -77,17 +82,20 @@ List<dynamic> getAddGoalForm() {
       "inputs": [
         {
           "type": "date",
-          "Placeholder": "Start Date"
+          "Placeholder": "Start Date",
+          "value": "startDate"
         },
         {
           "type": "date",
-          "Placeholder": "Deadline"
+          "Placeholder": "Deadline",
+          "value": "Deadline"
         },
         {
           "type": "dropdown",
           "Placeholder": "Select Tracking Frequency",
           "fromFirebase": false,
-          "options": ["Daily", "Weekly", "Monthly", "Quarterly", "Annually"]
+          "options": ["Daily", "Weekly", "Monthly", "Quarterly", "Annually"],
+          "value": "trackingFreq"
         }
       ]
     },
@@ -98,13 +106,15 @@ List<dynamic> getAddGoalForm() {
           "type": "dropdown",
           "Placeholder": "Select Scope",
           "fromFirebase": false,
-          "options": ["Country"]
+          "options": ["Country"],
+          "value": "scope"
         },
         {
           "type": "dropdown",
           "Placeholder": "Select Country",
           "fromFirebase": true,
-          "databaseName": "countries"
+          "databaseName": "countries",
+          "value": "countries"
         },
       ]
     },
@@ -113,11 +123,13 @@ List<dynamic> getAddGoalForm() {
       "inputs": [
         {
           "type": "text",
-          "Placeholder": "Baseline Value"
+          "Placeholder": "Baseline Value",
+          "value": "baseline"
         },
         {
           "type": "text",
-          "Placeholder": "Initial Value"
+          "Placeholder": "Initial Value",
+          "value": "initial"
         },
       ]
     }
