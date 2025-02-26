@@ -19,7 +19,7 @@ class SideNav extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
+            decoration: BoxDecoration(color: Colors.green),
             child: Text(
               this.user.email.toString(),
               style: TextStyle(color: Colors.white, fontSize: 24),

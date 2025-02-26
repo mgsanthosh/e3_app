@@ -103,6 +103,10 @@ class _AddEditDepartmentDialogState extends State<AddEditDepartmentDialog> {
           child: Text("Cancel"),
         ),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
           onPressed: _submitDepartment,
           child: Text(widget.department == null ? "Add" : "Update"),
         ),

@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(selectedScreen)),
+      appBar: AppBar(title: Text(selectedScreen.toUpperCase()),backgroundColor:Colors.green,titleTextStyle: TextStyle(fontSize: 20,color: Colors.white),),
       drawer: SideNav(
         role: role!,
         user: _currentUser!,
@@ -54,7 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
       ),
-      body: getScreen(selectedScreen)
+      body: Container(
+        color: Colors.green[100],
+        child: getScreen(selectedScreen),
+      )
     );
   }
 

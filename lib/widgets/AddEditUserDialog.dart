@@ -166,7 +166,7 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
       ),
       actions: [
         TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel")),
-        ElevatedButton(onPressed: _saveUser, child: Text(widget.user == null ? "Submit" : "Update")),
+        ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor: Colors.green,foregroundColor: Colors.white),onPressed: _saveUser, child: Text(widget.user == null ? "Submit" : "Update")),
       ],
     );
   }

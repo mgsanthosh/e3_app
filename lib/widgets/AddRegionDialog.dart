@@ -108,6 +108,10 @@ class _AddEditRegionDialogState extends State<AddEditRegionDialog> {
           child: Text("Cancel"),
         ),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
           onPressed: _saveRegion,
           child: Text(widget.region == null ? "Submit" : "Update"),
         ),

@@ -69,7 +69,8 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Locations")),
+      backgroundColor:Color(0xFFF1F6EB),
+      //appBar: AppBar(title: Text("Locations")),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: ListView.builder(
@@ -113,6 +114,7 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: _openAddLocationDialog,
         child: Icon(Icons.add),
       ),

@@ -65,7 +65,8 @@ class _RoleScreenState extends State<RoleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Roles")),
+      backgroundColor:Color(0xFFF1F6EB),
+      //appBar: AppBar(title: Text("Roles")),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: ListView.builder(
@@ -107,6 +108,7 @@ class _RoleScreenState extends State<RoleScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: _openAddRoleDialog,
         child: Icon(Icons.add),
       ),

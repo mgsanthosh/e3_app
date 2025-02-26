@@ -72,6 +72,8 @@ flutter:
     - assets/SDG6.png
     - assets/SDG7.png
     - assets/SDG8.png
+    - assets/logo.png
+    - assets/background.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

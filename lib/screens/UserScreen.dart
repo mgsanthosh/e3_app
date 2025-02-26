@@ -129,7 +129,8 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Users")),
+      backgroundColor: Color(0xFFF1F6EB),
+      //appBar: AppBar(title: Text("Users")),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: ListView.builder(
@@ -175,6 +176,7 @@ class _UserScreenState extends State<UserScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: _openAddUserDialog,
         child: Icon(Icons.add),
       ),
