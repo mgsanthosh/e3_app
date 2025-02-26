@@ -83,6 +83,10 @@ class _EditCountryDialogState extends State<EditCountryDialog> {
           child: Text("Cancel"),
         ),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
           onPressed: _updateCountry,
           child: Text("Save"),
         ),

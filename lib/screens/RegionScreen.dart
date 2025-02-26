@@ -58,7 +58,8 @@ class _RegionScreenState extends State<RegionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Regions")),
+      backgroundColor: Color(0xFFF1F6EB),
+      //appBar: AppBar(title: Text("Regions")),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: ListView.builder(
@@ -112,6 +113,7 @@ class _RegionScreenState extends State<RegionScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: _openAddRegionDialog,
         child: Icon(Icons.add),
       ),

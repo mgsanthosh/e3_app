@@ -127,7 +127,10 @@ class _AddEditLocationDialogState extends State<AddEditLocationDialog> {
       ),
       actions: [
         TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel")),
-        ElevatedButton(onPressed: _saveLocation, child: Text(widget.location == null ? "Submit" : "Update")),
+        ElevatedButton(style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,),
+            onPressed: _saveLocation, child: Text(widget.location == null ? "Submit" : "Update")),
       ],
     );
   }

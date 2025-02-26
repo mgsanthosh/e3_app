@@ -66,6 +66,10 @@ class _AddCountryDialogState extends State<AddCountryDialog> {
           child: Text("Cancel"),
         ),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
           onPressed: _addCountry,
           child: Text("Submit"),
         ),

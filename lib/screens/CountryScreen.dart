@@ -59,7 +59,8 @@ class _CountryScreenState extends State<CountryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Countries")),
+      backgroundColor: Color(0xFFF1F6EB),
+      //appBar: AppBar(title: Text("Countries")),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: ListView.builder(
@@ -71,7 +72,7 @@ class _CountryScreenState extends State<CountryScreen> {
               onTap: () => _openEditCountryDialog(country),
               child: Card(
                 margin: EdgeInsets.symmetric(vertical: 8),
-                elevation: 6,
+                elevation: 10,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -113,6 +114,7 @@ class _CountryScreenState extends State<CountryScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: _openAddCountryDialog,
         child: Icon(Icons.add),
       ),

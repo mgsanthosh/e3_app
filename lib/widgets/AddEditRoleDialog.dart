@@ -103,6 +103,10 @@ class _AddEditRoleDialogState extends State<AddEditRoleDialog> {
           child: Text("Cancel"),
         ),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
           onPressed: _submitRole,
           child: Text(widget.role == null ? "Add" : "Update"),
         ),
