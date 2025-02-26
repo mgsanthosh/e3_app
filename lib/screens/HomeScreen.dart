@@ -1,5 +1,6 @@
 import 'package:e3_app/screens/Dashboard.dart';
 import 'package:e3_app/screens/DepartmentScreen.dart';
+import 'package:e3_app/screens/EsgGoalsAndTargetsScreen.dart';
 import 'package:e3_app/screens/LocationScreen.dart';
 import 'package:e3_app/screens/RegionScreen.dart';
 import 'package:e3_app/screens/UserScreen.dart';
@@ -87,6 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
       case "ESG Audit":
         return Center(
             child: Text("ESG Audit View", style: TextStyle(fontSize: 20)));
+      case "ESG Goals and Targets":
+        return EsgGoalsAndTargetScreen();
       default:
         return Center(child: Text("Home View", style: TextStyle(fontSize: 20)));
     }

@@ -2,12 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../services/auth_service.dart';
 import '../utils/permissions.dart';
 
 class SideNav extends StatelessWidget {
   final String role;
   final User user;
   final Function(String) onMenuSelected;
+  final AuthService _authService = AuthService();
+
   SideNav({required this.role, required this.user, required this.onMenuSelected});
 
   @override
@@ -15,47 +18,68 @@ class SideNav extends StatelessWidget {
     List<dynamic> menuItems = getUserPermissions(role);
 
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
-          DrawerHeader(
+          UserAccountsDrawerHeader(
             decoration: BoxDecoration(color: Colors.green),
-            child: Text(
-              this.user.email.toString(),
-              style: TextStyle(color: Colors.white, fontSize: 24),
+            accountName: Text(
+              user.displayName ?? "User",
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+            accountEmail: Text(
+              user.email.toString(),
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            ),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Icon(Icons.person, size: 40, color: Colors.green),
             ),
           ),
-          ...menuItems.map((item) => buildMenuItem(item, context)).toList(),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: menuItems.map((item) => buildMenuItem(item, context)).toList(),
+            ),
+          ),
+          Divider(), // Adds a separator before the logout button
+          ListTile(
+            leading: Icon(Icons.logout, color: Colors.red),
+            title: Text('Logout', style: TextStyle(color: Colors.red)),
+            onTap: () => handleLogout(context), // Calls logout function
+          ),
         ],
       ),
     );
   }
 
   Widget buildMenuItem(dynamic item, BuildContext context) {
-    if (item.containsKey("options")) {
-      // If the item has sub-options, show an expandable menu
+    if (item.containsKey("options") && item["options"] is List) {
+      // Recursively build nested menu
       return ExpansionTile(
         title: Text(item["name"]),
         children: item["options"]
-            .map<Widget>((subItem) => ListTile(
-          title: Text(subItem["name"]),
-          onTap: () {
-            // Handle navigation here
-            onMenuSelected(subItem["name"]); // Call callback with selected menu
-            Navigator.pop(context); // Close drawer
-          },
-        ))
+            .map<Widget>((subItem) => buildMenuItem(subItem, context))
             .toList(),
       );
     } else {
-      // If it's a single item, show a normal ListTile
       return ListTile(
         title: Text(item["name"]),
         onTap: () {
-          // Handle navigation here
-          onMenuSelected(item["name"]); // Call callback with selected menu
-          Navigator.pop(context); // Close drawer
+          onMenuSelected(item["name"]);
+          Navigator.pop(context);
         },
+      );
+    }
+  }
+
+  void handleLogout(BuildContext context) async {
+    try {
+      await _authService.signOut();
+      Navigator.of(context).pushReplacementNamed('/login'); // Redirect to login screen
+    } catch (e) {
+      print("Logout Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to log out. Please try again.')),
       );
     }
   }

@@ -27,10 +27,10 @@ class AuthService {
     User? user = userCredential.user;
     if (user != null) {
 
-      await SharedPrefService.saveUserEmail(user.email!); // Save user data
+      // await SharedPrefService.saveUserEmail(user.email!); // Save user data
       await _firestore.collection("users").doc(user.uid).set({
         "email": user.email,
-        "role": role,
+        "role": role.toUpperCase(),
       });
     }
     return user;

@@ -18,6 +18,16 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
   final AuthService _authService = AuthService();
 
+  @override
+  void initState() {
+    super.initState();
+
+    // Prepopulate with test credentials
+    _emailController.text = "harsha@man.com";
+    _passwordController.text = "test@123";
+  }
+
+
   void _signInWithEmail() async {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();

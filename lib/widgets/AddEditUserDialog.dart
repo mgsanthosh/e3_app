@@ -103,21 +103,21 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
     };
 
     if (widget.user == null) {
+      print(selectedRole);
       _database.push().set(newUser);
+      _signUp(emailController.text, "test@123", selectedRole!);
     } else {
       String userId = widget.user!["id"]!;
       _database.child(userId).update(newUser);
-      _signUp(emailController.text, "test@123");
     }
 
     widget.onUserUpdated();
     Navigator.pop(context);
   }
 
-  void _signUp(String email, String password) async {
-    if (email.isNotEmpty && password.isNotEmpty) {
-      User? user = await _authService.signUpWithEmail(email, password, "ADMIN");
-
+  void _signUp(String email, String password, String role) async {
+    if (email.isNotEmpty) {
+      User? user = await _authService.signUpWithEmail(email, password, role);
     }
   }
 

@@ -44,44 +44,53 @@ List<dynamic> getUserPermissions(String role) {
       {
         "name":"Dashboard"
       },
+      // {
+      //   "name":"Master Data",
+      //   "options":[
+      //     {
+      //       "name":"Sectors"
+      //     },
+      //     {
+      //       "name":"Locations"
+      //     },
+      //     {
+      //       "name":"Countries"
+      //     },
+      //     {
+      //       "name":"Regions"
+      //     },
+      //     {
+      //       "name":"Standards"
+      //     },
+      //     {
+      //       "name":"My Goal Tracking"
+      //     },
+      //     {
+      //       "name":"SDG Goals"
+      //     }
+      //   ]
+      // },
       {
-        "name":"Master Data",
-        "options":[
-          {
-            "name":"Sectors"
-          },
-          {
-            "name":"Locations"
-          },
-          {
-            "name":"Countries"
-          },
-          {
-            "name":"Regions"
-          },
-          {
-            "name":"Standards"
-          },
+      "name": "Goal Management",
+        "options": [
           {
             "name":"ESG Goals and Targets"
           },
           {
-            "name":"ESG Categories"
+            "name":"My Goal Tracking",
+            "options": [
+              {
+                "name": "Measurable"
+              },
+              {
+                "name": "Non Measurable"
+              }
+            ]
           },
-          {
-            "name":"My Goal Tracking"
-          },
-          {
-            "name":"SDG Goals"
-          }
         ]
-
       },
       {
         "name":"ESG Audit",
-      },
-      {
-        "name":"User Management"
       }
     ];
   } else {
