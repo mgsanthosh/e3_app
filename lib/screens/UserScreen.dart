@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../widgets/AddEditUserDialog.dart';
 
 class UserScreen extends StatefulWidget {
+  final String mode;
+  const UserScreen({required this.mode});
   @override
   _UserScreenState createState() => _UserScreenState();
 }
@@ -13,6 +15,8 @@ class _UserScreenState extends State<UserScreen> {
   final DatabaseReference _departmentsDb = FirebaseDatabase.instance.ref("departments");
   final DatabaseReference _rolesDb = FirebaseDatabase.instance.ref("roles");
   final DatabaseReference _locationsDb = FirebaseDatabase.instance.ref("locations");
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
+
 
   List<Map<String, String>> users = [];
   List<String> departments = [];
@@ -32,9 +36,14 @@ class _UserScreenState extends State<UserScreen> {
   void _fetchUsers() {
     _database.onValue.listen((event) {
       final data = event.snapshot.value as Map<dynamic, dynamic>?;
-      if (data != null) {
+      if (data != null && _currentUser != null) {
         setState(() {
-          users = data.entries.map((entry) {
+          users = data.entries
+              .where((entry) {
+            final user = Map<String, dynamic>.from(entry.value);
+            return user["createdBy"] == _currentUser!.uid; // Filtering condition
+          })
+              .map((entry) {
             final user = Map<String, dynamic>.from(entry.value);
             return {
               "id": entry.key.toString(),
@@ -48,11 +57,14 @@ class _UserScreenState extends State<UserScreen> {
               "location": user["location"]?.toString() ?? "",
               "status": user["status"]?.toString() ?? "Active",
             };
-          }).toList().cast<Map<String, String>>();
+          })
+              .toList()
+              .cast<Map<String, String>>();
         });
       }
     });
   }
+
 
   // Fetch departments from Firebase
   void _fetchDepartments() {
@@ -99,6 +111,7 @@ class _UserScreenState extends State<UserScreen> {
         // roles: roles,
         // locations: locations,
         onUserUpdated: _fetchUsers,
+        mode: widget.mode,
       ),
     );
   }
@@ -113,6 +126,7 @@ class _UserScreenState extends State<UserScreen> {
         // roles: roles,
         // locations: locations,
         onUserUpdated: _fetchUsers,
+        mode: widget.mode,
       ),
     );
   }

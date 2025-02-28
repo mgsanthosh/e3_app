@@ -7,8 +7,9 @@ import '../services/auth_service.dart';
 class AddEditUserDialog extends StatefulWidget {
   final Map<String, String>? user;
   final VoidCallback onUserUpdated;
+  final String mode;
 
-  AddEditUserDialog({this.user, required this.onUserUpdated});
+  AddEditUserDialog({this.user, required this.onUserUpdated, required this.mode});
 
   @override
   _AddEditUserDialogState createState() => _AddEditUserDialogState();
@@ -20,6 +21,8 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
   final DatabaseReference _roleDatabase = FirebaseDatabase.instance.ref("roles");
   final DatabaseReference _locationDatabase = FirebaseDatabase.instance.ref("locations");
   final DatabaseReference _managersDatabase = FirebaseDatabase.instance.ref("managers");
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
+
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -32,6 +35,7 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
   String? selectedRole;
   String? selectedLocation;
   String selectedStatus = "Active";
+  String? createdBy;
 
   List<String> departments = [];
   List<String> roles = [];
@@ -54,6 +58,7 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
       selectedRole = widget.user!["role"];
       selectedLocation = widget.user!["location"];
       selectedStatus = widget.user!["status"]!;
+      createdBy = _currentUser!.uid;
     }
   }
 
@@ -69,14 +74,21 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
   }
 
   void _fetchRoles() async {
-    _roleDatabase.once().then((event) {
-      final data = event.snapshot.value as Map<dynamic, dynamic>?;
-      if (data != null) {
-        setState(() {
-          roles = data.values.map((role) => role["name"].toString()).toList();
-        });
-      }
-    });
+    if(widget.mode == "contributor") {
+      setState(() {
+        roles = ["Contributor"];
+      });
+    } else {
+      _roleDatabase.once().then((event) {
+        final data = event.snapshot.value as Map<dynamic, dynamic>?;
+        if (data != null) {
+          setState(() {
+            roles = data.values.map((role) => role["name"].toString()).toList();
+          });
+        }
+      });
+    }
+
   }
 
   void _fetchLocations() async {
@@ -101,6 +113,7 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
       "role": selectedRole ?? "",
       "location": selectedLocation ?? "",
       "status": selectedStatus,
+      "createdBy": _currentUser!.uid
     };
 
     if (widget.user == null) {
@@ -118,7 +131,7 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
 
   void _signUp(String email, String password, String role) async {
     if (email.isNotEmpty) {
-      User? user = await _authService.signUpWithEmail(email, password, role);
+      User? user = await _authService.signUpWithEmail(email, password, role, _currentUser!.uid);
       String path = "/${user!.uid}";
       final newUser = {
         "firstName": firstNameController.text,
@@ -130,6 +143,7 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
         "role": selectedRole ?? "",
         "location": selectedLocation ?? "",
         "status": selectedStatus,
+        "createdBy": _currentUser!.uid
       };
       _managersDatabase.child(path).set(newUser).then((_) {
       }).catchError((error) {

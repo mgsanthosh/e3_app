@@ -84,12 +84,14 @@ class _HomeScreenState extends State<HomeScreen> {
       case "Roles":
         return RoleScreen();
       case "Users":
-        return UserScreen();
+        return UserScreen(mode: "manager");
       case "ESG Audit":
         return Center(
             child: Text("ESG Audit View", style: TextStyle(fontSize: 20)));
       case "ESG Goals and Targets":
         return EsgGoalsAndTargetScreen();
+      case "Contributors":
+        return UserScreen(mode: "contributor");
       default:
         return Center(child: Text("Home View", style: TextStyle(fontSize: 20)));
     }

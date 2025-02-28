@@ -71,7 +71,7 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
       return;
     }
 
-    String path = "/esgData/${_currentUser!.uid}/${widget.categoryName}/${widget.subCategoryName}";
+    String path = "/managers/${_currentUser!.uid}/esgData/${widget.categoryName}/${widget.subCategoryName}";
     formData['status'] = "Created";
     _databaseReference.child(path).set(formData).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -91,8 +91,7 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
       setState(() => isLoading = false);
       return;
     }
-
-    String path = "/esgData/${_currentUser!.uid}/${widget.categoryName}/${widget.subCategoryName}";
+    String path = "/managers/${_currentUser!.uid}/esgData/${widget.categoryName}/${widget.subCategoryName}";
     _databaseReference.child(path).once().then((event) {
       final data = event.snapshot.value as Map<dynamic, dynamic>?;
 
