@@ -148,7 +148,7 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.subCategoryName),
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

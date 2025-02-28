@@ -44,9 +44,44 @@ List<dynamic> getEsgSubCategories(String category) {
       }
     ];
   } else if (category == "Social") {
-    return [];
+    return [
+      {
+        "name": "Supply Chain Management"
+      },
+      {
+        "name": "Human Rights and Labor standards"
+      },
+      {
+        "name": "Health and Safety"
+      },
+      {
+        "name": "Human Capital Management"
+      },
+      {
+        "name": "Community Relations"
+      },
+      {
+        "name": "Customer Privacy"
+      }
+    ];
   } else  {
-    return [];
+    return [
+      {
+        "name": "Transparency and Reporting"
+      },
+      {
+        "name": "Corporate Culture and Ethics"
+      },
+      {
+        "name": "Audit and Internal Controls"
+      },
+      {
+        "name": "Stakeholder Engagement"
+      },
+      {
+        "name": "Corporate Resilience and Adaptability"
+      }
+    ];
   }
 }
 

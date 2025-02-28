@@ -23,7 +23,7 @@ class EsgGoalDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(goalName),
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.green,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
