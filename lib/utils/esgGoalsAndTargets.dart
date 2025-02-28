@@ -25,61 +25,78 @@ List<dynamic> getEsgSubCategories(String category) {
   if(category == "Environmental") {
     return [
       {
-        "name": "Energy Efficiency"
+        "name": "Energy Efficiency",
+        "category": "affordable_and_clean_energy"
       },
       {
-        "name": "Sustainable Water Management"
+        "name": "Sustainable Water Management",
+        "category": "clean_water_and_sanitation"
       },
       {
-        "name": "Biodiversity and Conservation"
+        "name": "Biodiversity and Conservation",
+        "category": "climate_action"
       },
       {
-        "name": "Carbon Emissions"
+        "name": "Carbon Emissions",
+        "category": "affordable_and_clean_energy",
       },
       {
-        "name": "Environmental Policy and Report"
+        "name": "Environmental Policy and Report",
+        "category": "quality_education"
       },
       {
-        "name": "Waste Management"
+        "name": "Waste Management",
+        "category": "clean_water_and_sanitation"
       }
     ];
   } else if (category == "Social") {
     return [
       {
-        "name": "Supply Chain Management"
+        "name": "Supply Chain Management",
+        "category": "quality_education"
       },
       {
-        "name": "Human Rights and Labor standards"
+        "name": "Human Rights and Labor standards",
+        "category": "quality_education"
       },
       {
-        "name": "Health and Safety"
+        "name": "Health and Safety",
+        "category": "good_health_and_wellbeing"
       },
       {
-        "name": "Human Capital Management"
+        "name": "Human Capital Management",
+        "category": "decent_work_and_economic_growth"
       },
       {
-        "name": "Community Relations"
+        "name": "Community Relations",
+        "category": "good_health_and_wellbeing"
       },
       {
-        "name": "Customer Privacy"
+        "name": "Customer Privacy",
+        "category": "good_health_and_wellbeing"
       }
     ];
   } else  {
     return [
       {
-        "name": "Transparency and Reporting"
+        "name": "Transparency and Reporting",
+        "category": "quality_education"
       },
       {
-        "name": "Corporate Culture and Ethics"
+        "name": "Corporate Culture and Ethics",
+        "category": "decent_work_and_economic_growth"
       },
       {
-        "name": "Audit and Internal Controls"
+        "name": "Audit and Internal Controls",
+        "category": "quality_education"
       },
       {
-        "name": "Stakeholder Engagement"
+        "name": "Stakeholder Engagement",
+        "category": "decent_work_and_economic_growth"
       },
       {
-        "name": "Corporate Resilience and Adaptability"
+        "name": "Corporate Resilience and Adaptability",
+        "category": "decent_work_and_economic_growth"
       }
     ];
   }
@@ -167,6 +184,36 @@ List<dynamic> getAddGoalForm() {
           "value": "initial"
         },
       ]
+    }
+  ];
+}
+
+
+List<dynamic> getCarbonEmissionValuesList() {
+  return [
+    {
+      "name": "Energy Consumption",
+      "emissionFactor": 0.5,
+      "emisionFactorTitle": "Emission Factor (kg CO2e per kWh)",
+      "inputTitle": "Energy Consumption (kWh)"
+    },
+    {
+      "name": "Fuel Consumption",
+      "emissionFactor": 8.89,
+      "emisionFactorTitle": "Emission Factor (kg CO2e per gallon)",
+      "inputTitle": "Fuel Consumption (gallons)"
+    },
+    {
+      "name": "Transportation",
+      "emissionFactor": 0.411,
+      "emisionFactorTitle": "Emission Factor (kg CO2e per mile)",
+      "inputTitle": "Activity Data (miles travelled)"
+    },
+    {
+      "name": "Waste Disposal",
+      "emissionFactor": 1.2,
+      "emisionFactorTitle": "Emission Factor (kg CO2e per kg)",
+      "inputTitle": "Waste Produced (Kg)"
     }
   ];
 }

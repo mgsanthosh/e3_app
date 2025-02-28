@@ -19,6 +19,7 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
   final DatabaseReference _departmentDatabase = FirebaseDatabase.instance.ref("departments");
   final DatabaseReference _roleDatabase = FirebaseDatabase.instance.ref("roles");
   final DatabaseReference _locationDatabase = FirebaseDatabase.instance.ref("locations");
+  final DatabaseReference _managersDatabase = FirebaseDatabase.instance.ref("managers");
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -118,6 +119,21 @@ class _AddEditUserDialogState extends State<AddEditUserDialog> {
   void _signUp(String email, String password, String role) async {
     if (email.isNotEmpty) {
       User? user = await _authService.signUpWithEmail(email, password, role);
+      String path = "/${user!.uid}";
+      final newUser = {
+        "firstName": firstNameController.text,
+        "lastName": lastNameController.text,
+        "username": usernameController.text,
+        "email": emailController.text,
+        "phone": phoneController.text,
+        "department": selectedDepartment ?? "",
+        "role": selectedRole ?? "",
+        "location": selectedLocation ?? "",
+        "status": selectedStatus,
+      };
+      _managersDatabase.child(path).set(newUser).then((_) {
+      }).catchError((error) {
+      });
     }
   }
 

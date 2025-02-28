@@ -44,32 +44,14 @@ List<dynamic> getUserPermissions(String role) {
       {
         "name":"Dashboard"
       },
-      // {
-      //   "name":"Master Data",
-      //   "options":[
-      //     {
-      //       "name":"Sectors"
-      //     },
-      //     {
-      //       "name":"Locations"
-      //     },
-      //     {
-      //       "name":"Countries"
-      //     },
-      //     {
-      //       "name":"Regions"
-      //     },
-      //     {
-      //       "name":"Standards"
-      //     },
-      //     {
-      //       "name":"My Goal Tracking"
-      //     },
-      //     {
-      //       "name":"SDG Goals"
-      //     }
-      //   ]
-      // },
+      {
+        "name":"Master Data",
+        "options":[
+          {
+            "name": "Contributors"
+          }
+        ]
+      },
       {
       "name": "Goal Management",
         "options": [
