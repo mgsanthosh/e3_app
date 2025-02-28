@@ -194,25 +194,25 @@ List<dynamic> getCarbonEmissionValuesList() {
     {
       "name": "Energy Consumption",
       "emissionFactor": 0.5,
-      "emisionFactorTitle": "Emission Factor (kg CO2e per kWh)",
+      "emissionFactorTitle": "Emission Factor (kg CO2e per kWh)",
       "inputTitle": "Energy Consumption (kWh)"
     },
     {
       "name": "Fuel Consumption",
       "emissionFactor": 8.89,
-      "emisionFactorTitle": "Emission Factor (kg CO2e per gallon)",
+      "emissionFactorTitle": "Emission Factor (kg CO2e per gallon)",
       "inputTitle": "Fuel Consumption (gallons)"
     },
     {
       "name": "Transportation",
       "emissionFactor": 0.411,
-      "emisionFactorTitle": "Emission Factor (kg CO2e per mile)",
+      "emissionFactorTitle": "Emission Factor (kg CO2e per mile)",
       "inputTitle": "Activity Data (miles travelled)"
     },
     {
       "name": "Waste Disposal",
       "emissionFactor": 1.2,
-      "emisionFactorTitle": "Emission Factor (kg CO2e per kg)",
+      "emissionFactorTitle": "Emission Factor (kg CO2e per kg)",
       "inputTitle": "Waste Produced (Kg)"
     }
   ];

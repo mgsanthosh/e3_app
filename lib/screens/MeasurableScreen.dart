@@ -53,6 +53,50 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
     });
   }
 
+  // Function to determine status chip
+  String getStatus(Map<String, dynamic> esgDetails) {
+    double initialValue = double.tryParse(esgDetails["Initial Value"]?.toString() ?? "0") ?? 0;
+    double baselineValue = double.tryParse(esgDetails["Baseline Value"]?.toString() ?? "0") ?? 0;
+
+    if (initialValue == 0) return "Created";
+    if (initialValue > 0 && initialValue < baselineValue) return "In Progress";
+    return "Completed";
+  }
+
+  // Function to save all ESG data to approvals
+  void _saveAllEsgDataToApprovals() {
+    if (_creatorId == null || _esgData.isEmpty) return;
+
+    DatabaseReference approvalsRef = _database.ref("managers/$_creatorId/approvals");
+
+    _esgData.forEach((category, esgItems) {
+      esgItems.forEach((key, value) {
+        Map<String, dynamic> esgDetails = Map<String, dynamic>.from(value);
+        double carbonFootprint = (esgDetails["carbonFootprint"] ?? 0).toDouble();
+
+        approvalsRef.push().set({
+          "category": category,
+          "name": key,
+          "startDate": esgDetails["Start Date"] ?? "N/A",
+          "endDate": esgDetails["Deadline"] ?? "N/A",
+          "department": esgDetails["Department"] ?? "N/A",
+          "description": esgDetails["Description"] ?? "N/A",
+          "baselineValue": esgDetails["Baseline Value"] ?? "N/A",
+          "initialValue": esgDetails["Initial Value"] ?? "N/A",
+          "selectCountry": esgDetails["Select Country"] ?? "N/A",
+          "selectScope": esgDetails["Select Scope"] ?? "N/A",
+          "selectTrackingFrequency": esgDetails["Select Tracking Frequency"] ?? "N/A",
+          "selectType": esgDetails["Select Type"] ?? "N/A",
+          "status": esgDetails["status"] ?? "N/A",
+          "newValue": carbonFootprint, // Storing carbonFootprint as newValue
+        });
+      });
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("All ESG data saved to approvals!")),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,10 +136,10 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
               padding: EdgeInsets.all(10),
               children: (_esgData[_selectedCategory] as Map<dynamic, dynamic>).entries.map((entry) {
                 final Map<String, dynamic> esgDetails = Map<String, dynamic>.from(entry.value);
-
                 String name = entry.key.toString();
                 String startDate = esgDetails["Start Date"]?.toString() ?? "N/A";
                 String endDate = esgDetails["Deadline"]?.toString() ?? "N/A";
+                String status = getStatus(esgDetails);
 
                 return Card(
                   margin: EdgeInsets.symmetric(vertical: 8),
@@ -113,6 +157,15 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Chip(
+                              label: Text(status),
+                              backgroundColor: status == "Completed"
+                                  ? Colors.green
+                                  : status == "In Progress"
+                                  ? Colors.orange
+                                  : Colors.grey,
+                              labelStyle: TextStyle(color: Colors.white),
+                            ),
                             ElevatedButton(
                               onPressed: () => _showContributionPopup(context),
                               child: Text("Contribute"),
@@ -131,7 +184,6 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
     );
   }
 
-  // Pop-up for contributing Carbon Emission
   void _showContributionPopup(BuildContext context) {
     List<dynamic> emissionsList = getCarbonEmissionValuesList();
     String? selectedEmissionType;
