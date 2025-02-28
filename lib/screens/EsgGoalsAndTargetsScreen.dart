@@ -24,10 +24,7 @@ class _EsgGoalsAndTargetScreenState extends State<EsgGoalsAndTargetScreen> {
   Widget build(BuildContext context) {
     List<dynamic> esgGoals = getEsgGoalsCard();
     return Scaffold(
-      appBar: AppBar(
-        title: Text("ESG Goals & Targets"),
-        backgroundColor: Colors.teal,
-      ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
