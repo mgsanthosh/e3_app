@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/esgGoalsAndTargets.dart';
+
 class MeasurableScreen extends StatefulWidget {
   @override
   _MeasurableScreenState createState() => _MeasurableScreenState();
@@ -51,6 +53,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,57 +96,30 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                 String name = entry.key.toString();
                 String startDate = esgDetails["Start Date"]?.toString() ?? "N/A";
                 String endDate = esgDetails["Deadline"]?.toString() ?? "N/A";
-                double initialValue = double.tryParse(esgDetails["Initial Value"]?.toString() ?? "0") ?? 0;
-                double baselineValue = double.tryParse(esgDetails["Baseline Value"]?.toString() ?? "0") ?? 0;
 
-                // Determine status
-                String status;
-                if (initialValue == 0) {
-                  status = "Created";
-                } else if (initialValue > 0 && initialValue < baselineValue) {
-                  status = "In Progress";
-                } else {
-                  status = "Completed";
-                }
-
-                // Status chip color
-                Color statusColor;
-                switch (status) {
-                  case "In Progress":
-                    statusColor = Colors.orange;
-                    break;
-                  case "Completed":
-                    statusColor = Colors.green;
-                    break;
-                  default:
-                    statusColor = Colors.blue;
-                }
-
-                return GestureDetector(
-                  onTap: () => _showDetailsPopup(context, name, esgDetails),
-                  child: Card(
-                    margin: EdgeInsets.symmetric(vertical: 8),
-                    elevation: 6,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                          SizedBox(height: 5),
-                          Text("Start: $startDate  |  End: $endDate", style: TextStyle(color: Colors.grey[700])),
-                          SizedBox(height: 10),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Chip(
-                              label: Text(status, style: TextStyle(color: Colors.white)),
-                              backgroundColor: statusColor,
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                return Card(
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  elevation: 6,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  child: Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 5),
+                        Text("Start: $startDate  |  End: $endDate", style: TextStyle(color: Colors.grey[700])),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () => _showContributionPopup(context),
+                              child: Text("Contribute"),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -155,30 +131,92 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
     );
   }
 
-  // Pop-up dialog to show full ESG details
-  void _showDetailsPopup(BuildContext context, String title, Map<String, dynamic> details) {
+  // Pop-up for contributing Carbon Emission
+  void _showContributionPopup(BuildContext context) {
+    List<dynamic> emissionsList = getCarbonEmissionValuesList();
+    String? selectedEmissionType;
+    double emissionFactor = 0.0;
+    String emissionFactorTitle = "";
+    String inputTitle = "";
+    double inputValue = 0.0;
+    double carbonFootprint = 0.0;
+    bool isCalculationDone = false;
+
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: details.entries.map((entry) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text("${entry.key}: ${entry.value}", style: TextStyle(fontSize: 16)),
-                );
-              }).toList(),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Close", style: TextStyle(color: Colors.blue)),
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("Contribute to Carbon Reduction"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButton<String>(
+                    value: selectedEmissionType,
+                    hint: Text("Select Type"),
+                    isExpanded: true,
+                    items: emissionsList.map((e) {
+                      return DropdownMenuItem<String>(
+                        value: e["name"],
+                        child: Text(e["name"]),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      final selectedData = emissionsList.firstWhere((e) => e["name"] == value);
+                      setState(() {
+                        selectedEmissionType = value;
+                        emissionFactor = selectedData["emissionFactor"];
+                        emissionFactorTitle = selectedData["emissionFactorTitle"];
+                        inputTitle = selectedData["inputTitle"];
+                      });
+                    },
+                  ),
+                  if (selectedEmissionType != null) ...[
+                    SizedBox(height: 10),
+                    Text(emissionFactorTitle, style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextField(
+                      readOnly: true,
+                      decoration: InputDecoration(border: OutlineInputBorder(), hintText: emissionFactor.toString()),
+                    ),
+                    SizedBox(height: 10),
+                    Text(inputTitle, style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        setState(() {
+                          inputValue = double.tryParse(value) ?? 0;
+                        });
+                      },
+                      decoration: InputDecoration(border: OutlineInputBorder(), hintText: "Enter value"),
+                    ),
+                  ],
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        carbonFootprint = inputValue * emissionFactor;
+                        isCalculationDone = true;
+                      });
+                    },
+                    child: Text("Calculate Carbon Footprint"),
+                  ),
+                  if (isCalculationDone) Text("Carbon Footprint: $carbonFootprint kg CO2e"),
+                  if (isCalculationDone)
+                    ElevatedButton(
+                      onPressed: () {
+                        _database.ref("managers/$_creatorId/approvals").push().set({
+                          "type": selectedEmissionType,
+                          "carbonFootprint": carbonFootprint,
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Text("Save"),
+                    ),
+                ],
+              ),
+            );
+          },
         );
       },
     );
