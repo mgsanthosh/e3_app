@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'CountryScreen.dart';
+import 'MeasurableScreen.dart';
 import 'RoleScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -92,6 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return EsgGoalsAndTargetScreen();
       case "Contributors":
         return UserScreen(mode: "contributor");
+      case "Measurable":
+        return MeasurableScreen();
       default:
         return Center(child: Text("Home View", style: TextStyle(fontSize: 20)));
     }

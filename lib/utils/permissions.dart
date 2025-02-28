@@ -4,95 +4,66 @@ List<dynamic> getUserPermissions(String role) {
   if (role == "ADMIN") {
     return [
       {
-        "name":"Dashboard",
+        "name": "Dashboard",
       },
       {
         "name": "Master Data",
         "options": [
-          {
-            "name": "Countries"
-          },
-          {
-            "name": "Regions"
-          },
-          {
-            "name": "Locations"
-          },
-          {
-            "name":"Profile"
-          }
+          {"name": "Countries"},
+          {"name": "Regions"},
+          {"name": "Locations"},
+          {"name": "Profile"}
         ]
       },
       {
         "name": "User Management",
-        "options":[
-          {
-            "name": "Departments"
-          },
-          {
-            "name":"Users"
-          },
-          {
-            "name":"Roles"
-          }
+        "options": [
+          {"name": "Departments"},
+          {"name": "Users"},
+          {"name": "Roles"}
         ]
       }
-
     ];
   } else if (role == "MANAGER") {
     return [
+      {"name": "Dashboard"},
       {
-        "name":"Dashboard"
-      },
-      {
-        "name":"Master Data",
-        "options":[
-          {
-            "name": "Contributors"
-          }
+        "name": "Master Data",
+        "options": [
+          {"name": "Contributors"}
         ]
       },
       {
-      "name": "Goal Management",
+        "name": "Goal Management",
         "options": [
+          {"name": "ESG Goals and Targets"},
           {
-            "name":"ESG Goals and Targets"
-          },
-          {
-            "name":"My Goal Tracking",
+            "name": "My Goal Tracking",
             "options": [
-              {
-                "name": "Measurable"
-              },
-              {
-                "name": "Non Measurable"
-              }
+              {"name": "Measurable"},
+              {"name": "Non Measurable"}
             ]
           },
         ]
       },
       {
-        "name":"ESG Audit",
+        "name": "ESG Audit",
       }
     ];
   } else {
     return [
+      {"name": "Dashboard"},
       {
-        "name":"Dashboard"
-      },
-      {
-        "name":"Master Data",
-        "options":[
+        "name": "Goal Management",
+        "options": [
           {
-            "name":"Standards"
+            "name": "Goal Tracking",
+            "options": [
+              {"name": "Measurable"},
+              {"name": "Non Measurable"},
+            ]
           },
-          {
-            "name":"Goal Tracking"
-          }
         ]
-      },
-      {
-        "name":"ESG Audit"
       }
     ];
   }

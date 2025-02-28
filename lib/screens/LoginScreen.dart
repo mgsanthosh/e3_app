@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
 
     // Prepopulate with test credentials
-    _emailController.text = "harsha@e3.com";
+    _emailController.text = "mithun@e3.com";
     _passwordController.text = "test@123";
   }
 
