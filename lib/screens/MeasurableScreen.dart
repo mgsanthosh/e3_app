@@ -14,6 +14,10 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
   final User? _currentUser = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseDatabase _database = FirebaseDatabase.instance;
+  String selectedCategory = "NA";
+  String selectedSubcategory = "NA";
+
+
 
   String? _creatorId;
   Map<String, dynamic> _esgData = {};
@@ -64,19 +68,13 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
   }
 
   // Function to save all ESG data to approvals
-  void _saveAllEsgDataToApprovals() {
+  void _saveAllEsgDataToApprovals(String category, String name, dynamic esgDetails, double carbonFootprint) {
     if (_creatorId == null || _esgData.isEmpty) return;
-
     DatabaseReference approvalsRef = _database.ref("managers/$_creatorId/approvals");
-
-    _esgData.forEach((category, esgItems) {
-      esgItems.forEach((key, value) {
-        Map<String, dynamic> esgDetails = Map<String, dynamic>.from(value);
-        double carbonFootprint = (esgDetails["carbonFootprint"] ?? 0).toDouble();
 
         approvalsRef.push().set({
           "category": category,
-          "name": key,
+          "name": name,
           "startDate": esgDetails["Start Date"] ?? "N/A",
           "endDate": esgDetails["Deadline"] ?? "N/A",
           "department": esgDetails["Department"] ?? "N/A",
@@ -88,10 +86,8 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
           "selectTrackingFrequency": esgDetails["Select Tracking Frequency"] ?? "N/A",
           "selectType": esgDetails["Select Type"] ?? "N/A",
           "status": esgDetails["status"] ?? "N/A",
-          "newValue": carbonFootprint, // Storing carbonFootprint as newValue
+          "newValue": carbonFootprint.toString(), // Storing carbonFootprint as newValue
         });
-      });
-    });
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("All ESG data saved to approvals!")),
@@ -167,7 +163,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                               labelStyle: TextStyle(color: Colors.white),
                             ),
                             ElevatedButton(
-                              onPressed: () => _showContributionPopup(context),
+                              onPressed: () => _showContributionPopup(context, _selectedCategory!, name, esgDetails),
                               child: Text("Contribute"),
                             ),
                           ],
@@ -184,7 +180,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
     );
   }
 
-  void _showContributionPopup(BuildContext context) {
+  void _showContributionPopup(BuildContext context, String category, String name, dynamic esgDetails) {
     List<dynamic> emissionsList = getCarbonEmissionValuesList();
     String? selectedEmissionType;
     double emissionFactor = 0.0;
@@ -257,11 +253,12 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                   if (isCalculationDone)
                     ElevatedButton(
                       onPressed: () {
-                        _database.ref("managers/$_creatorId/approvals").push().set({
-                          "type": selectedEmissionType,
-                          "carbonFootprint": carbonFootprint,
-                        });
-                        Navigator.pop(context);
+                        // _database.ref("managers/$_creatorId/approvals").push().set({
+                        //   "type": selectedEmissionType,
+                        //   "carbonFootprint": carbonFootprint,
+                        // });
+                        // Navigator.pop(context);
+                        _saveAllEsgDataToApprovals(category, name,esgDetails, carbonFootprint);
                       },
                       child: Text("Save"),
                     ),
