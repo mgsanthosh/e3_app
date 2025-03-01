@@ -217,3 +217,94 @@ List<dynamic> getCarbonEmissionValuesList() {
     }
   ];
 }
+
+
+List<dynamic> getDashboardCategories() {
+  return [
+    {
+      "main": "Environmental",
+      "name": "Energy Efficiency",
+      "category": "affordable_and_clean_energy"
+    },
+    {
+      "main": "Environmental",
+      "name": "Sustainable Water Management",
+      "category": "clean_water_and_sanitation"
+    },
+    {
+      "main": "Environmental",
+      "name": "Biodiversity and Conservation",
+      "category": "climate_action"
+    },
+    {
+      "main": "Environmental",
+      "name": "Carbon Emissions",
+      "category": "affordable_and_clean_energy",
+    },
+    {
+      "main": "Environmental",
+      "name": "Environmental Policy and Report",
+      "category": "quality_education"
+    },
+    {
+      "main": "Environmental",
+      "name": "Waste Management",
+      "category": "clean_water_and_sanitation"
+    },
+    {
+      "main": "Social",
+      "name": "Supply Chain Management",
+      "category": "quality_education"
+    },
+    {
+      "main": "Social",
+      "name": "Human Rights and Labor standards",
+      "category": "quality_education"
+    },
+    {
+      "main": "Social",
+      "name": "Health and Safety",
+      "category": "good_health_and_wellbeing"
+    },
+    {
+      "main": "Social",
+      "name": "Human Capital Management",
+      "category": "decent_work_and_economic_growth"
+    },
+    {
+      "main": "Social",
+      "name": "Community Relations",
+      "category": "good_health_and_wellbeing"
+    },
+    {
+      "main": "Social",
+      "name": "Customer Privacy",
+      "category": "good_health_and_wellbeing"
+    },
+    {
+      "main": "Governance",
+      "name": "Transparency and Reporting",
+      "category": "quality_education"
+    },
+    {
+      "main": "Governance",
+      "name": "Corporate Culture and Ethics",
+      "category": "decent_work_and_economic_growth"
+    },
+    {
+      "main": "Governance",
+      "name": "Audit and Internal Controls",
+      "category": "quality_education"
+    },
+    {
+      "main": "Governance",
+      "name": "Stakeholder Engagement",
+      "category": "decent_work_and_economic_growth"
+    },
+    {
+      "main": "Governance",
+      "name": "Corporate Resilience and Adaptability",
+      "category": "decent_work_and_economic_growth"
+    }
+  ];
+}

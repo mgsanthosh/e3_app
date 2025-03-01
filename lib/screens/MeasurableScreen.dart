@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../utils/esgGoalsAndTargets.dart';
 import 'ApprovalsScreen.dart';
+import 'MeasurableDetailsScreen.dart';
 
 class MeasurableScreen extends StatefulWidget {
   @override
@@ -24,6 +25,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
   String? _role;
   Map<String, dynamic> _esgData = {};
   String? _selectedCategory;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -54,13 +56,13 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
   // Fetch ESG Data from Realtime Database
   void _fetchEsgData() {
     if (_creatorId == null) return;
-
     _database.ref("managers/$_creatorId/esgData").onValue.listen((event) {
       final data = event.snapshot.value as Map<dynamic, dynamic>?;
       if (data != null) {
         setState(() {
           _esgData = data.map((key, value) => MapEntry(key.toString(), value));
           _selectedCategory ??= _esgData.keys.first; // Select first category by default
+          _isLoading = false;
         });
       }
     });
@@ -77,7 +79,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
   }
 
   // Function to save all ESG data to approvals
-  void _saveAllEsgDataToApprovals(String category, String name, dynamic esgDetails, double carbonFootprint) {
+  void _saveAllEsgDataToApprovals(String category, String name, dynamic esgDetails, double carbonFootprint, String esgKey) {
     if (_creatorId == null || _esgData.isEmpty) return;
     DatabaseReference approvalsRef = _database.ref("managers/$_creatorId/approvals");
 
@@ -95,7 +97,8 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
           "selectTrackingFrequency": esgDetails["Select Tracking Frequency"] ?? "N/A",
           "selectType": esgDetails["Select Type"] ?? "N/A",
           "status": esgDetails["status"] ?? "N/A",
-          "newValue": carbonFootprint.toString(), // Storing carbonFootprint as newValue
+          "newValue": carbonFootprint.toString(),
+          "esgKey": esgKey
         });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -117,12 +120,22 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
     );
   }
 
+  void _redirectToMeasurableDetailsScreen(Map<String, dynamic> esgData, String subcategory) {
+    print("The Sub Category " + subcategory);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MeasurableDetailsScreen(esgData: esgData,onShowContributionPopup: _showContributionPopup, selectedCategory: _selectedCategory!,selectedSubCategory: subcategory, onFetchEsgData: _fetchEsgData,),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Measurable Data")),
       body: _esgData.isEmpty
-          ? Center(child: CircularProgressIndicator()) // Show loader if data is empty
+          ? Center(child: Container(child: Text("No Data Available"),)) // Show loader if data is empty
           : Column(
         children: [
           // Tabs for categories
@@ -162,44 +175,56 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                 String baselineValue = esgDetails["Baseline Value"]?.toString() ?? "N/A";
                 String initialValue = esgDetails["Initial Value"]?.toString() ?? "N/A";
 
-                return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  elevation: 6,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  child: Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 5),
-                        Text("Start: $startDate  |  End: $endDate", style: TextStyle(color: Colors.grey[700])),
-                        SizedBox(height: 10),
-                        Text("Baseline Value: $baselineValue"),
-                        SizedBox(height: 10),
-                        Text("Current Value: $initialValue"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                return GestureDetector(
+                  onTap: () => {
+                    _redirectToMeasurableDetailsScreen(esgDetails, name)
+                  },
+                  child: Card(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    elevation: 6,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: GestureDetector(
+                        onTap: () => {
+                          // _redirectToMeasurableDetailsScreen(esgDetails)
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Chip(
-                              label: Text(status),
-                              backgroundColor: status == "Completed"
-                                  ? Colors.green
-                                  : status == "In Progress"
-                                  ? Colors.orange
-                                  : Colors.grey,
-                              labelStyle: TextStyle(color: Colors.white),
-                            ),
-                            _role == "MANAGER" ? ElevatedButton(
-                              onPressed: () => _redirectToApprovalsScreen(_creatorId!, _role!, esgDetails, name),
-                              child: Text("Approvals"),
-                            ) :ElevatedButton(
-                              onPressed: () => _showContributionPopup(context, _selectedCategory!, name, esgDetails),
-                              child: Text("Contribute"),
-                            ),
+                            Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            SizedBox(height: 5),
+                            Text("${esgDetails.length} Subcategories"),
+
+                            // Text("Start: $startDate  |  End: $endDate", style: TextStyle(color: Colors.grey[700])),
+                            // SizedBox(height: 10),
+                            // Text("Baseline Value: $baselineValue"),
+                            // SizedBox(height: 10),
+                            // Text("Current Value: $initialValue"),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     Chip(
+                            //       label: Text(status),
+                            //       backgroundColor: status == "Completed"
+                            //           ? Colors.green
+                            //           : status == "In Progress"
+                            //           ? Colors.orange
+                            //           : Colors.grey,
+                            //       labelStyle: TextStyle(color: Colors.white),
+                            //     ),
+                            //     _role == "MANAGER" ? ElevatedButton(
+                            //       onPressed: () => _redirectToApprovalsScreen(_creatorId!, _role!, esgDetails, name),
+                            //       child: Text("Approvals"),
+                            //     ) :ElevatedButton(
+                            //       onPressed: () => _showContributionPopup(context, _selectedCategory!, name, esgDetails),
+                            //       child: Text("Contribute"),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 );
@@ -211,7 +236,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
     );
   }
 
-  void _showContributionPopup(BuildContext context, String category, String name, dynamic esgDetails) {
+  void _showContributionPopup(BuildContext context, String category, String name, dynamic esgDetails, String esgKey) {
     List<dynamic> emissionsList = getCarbonEmissionValuesList();
     String? selectedEmissionType;
     double emissionFactor = 0.0;
@@ -289,7 +314,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                         //   "carbonFootprint": carbonFootprint,
                         // });
                         // Navigator.pop(context);
-                        _saveAllEsgDataToApprovals(category, name,esgDetails, carbonFootprint);
+                        _saveAllEsgDataToApprovals(category, name,esgDetails, carbonFootprint, esgKey);
                         Navigator.pop(context);
                       },
                       child: Text("Save"),

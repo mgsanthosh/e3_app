@@ -24,6 +24,7 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
   Map<String, List<String>> firebaseData = {}; // Stores fetched Firebase data
   Map<String, dynamic> formData = {}; // Stores user inputs
   bool isLoading = true;
+  List< Map<String, dynamic>> formDataList = [];
   @override
   void initState() {
     super.initState();
@@ -73,7 +74,8 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
 
     String path = "/managers/${_currentUser!.uid}/esgData/${widget.categoryName}/${widget.subCategoryName}";
     formData['status'] = "Created";
-    _databaseReference.child(path).set(formData).then((_) {
+
+    _databaseReference.child(path).push().set(formData).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Data saved successfully!")),
       );
@@ -83,7 +85,9 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
         SnackBar(content: Text("Failed to save data: $error")),
       );
     });
+    _fetchSavedData();
   }
+
 
   /// Fetch saved data from Firebase and update formData
   void _fetchSavedData() {
@@ -97,7 +101,8 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
 
       if (data != null) {
         setState(() {
-          formData = Map<String, dynamic>.from(data);
+          formDataList = data.entries.map((e) => Map<String, dynamic>.from(e.value)).toList();
+          // formData = Map<String, dynamic>.from(data);
           isLoading = false;
         });
       }
@@ -248,39 +253,47 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Container(
-        width: double.infinity, // Make the card fill the width
-        margin: const EdgeInsets.all(16),
-        child: formData.isNotEmpty
-            ? Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align text and chip
-              children: [
-                Expanded(
-                  child: Text(
-                    formData["Description"] ?? "No data",
-                    style: const TextStyle(fontSize: 16),
-                    overflow: TextOverflow.ellipsis, // Prevent overflow
+          : formDataList.isNotEmpty
+          ? ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: formDataList.length,
+        itemBuilder: (context, index) {
+          Map<String, dynamic> formData = formDataList[index]; // Get each form data item
+
+          return Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            margin: const EdgeInsets.only(bottom: 12), // Space between cards
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align text and chip
+                children: [
+                  Expanded(
+                    child: Text(
+                      formData["Description"] ?? "No description",
+                      style: const TextStyle(fontSize: 16),
+                      overflow: TextOverflow.ellipsis, // Prevent overflow
+                    ),
                   ),
-                ),
-                Chip(
-                  label: Text(
-                    formData["status"] ?? "No status",
-                    style: const TextStyle(color: Colors.white),
+                  Chip(
+                    label: Text(
+                      formData["status"] ?? "No status",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: _getStatusColor(formData["status"]),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   ),
-                  backgroundColor: _getStatusColor(formData["status"]),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        )
-            : const SizedBox(), // Empty space when no data
+          );
+        },
       )
+          : const Center(
+        child: Text("No data available", style: TextStyle(fontSize: 16)),
+      ),
+
     );
   }
 }

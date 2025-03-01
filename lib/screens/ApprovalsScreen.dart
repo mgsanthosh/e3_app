@@ -30,7 +30,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
       if (data != null) {
         setState(() {
           _approvalKeys = data.keys.cast<String>().toList();
-          _approvals = data.entries.map((e) => Map<String, dynamic>.from(e.value)).where((approval) => approval["name"] == widget.category).toList();
+          _approvals = data.entries.map((e) => Map<String, dynamic>.from(e.value)).where((approval) => approval["description"] == widget.category).toList();
         });
       }
     });
@@ -54,8 +54,9 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     String category = esgValues["category"];
     String subCategory = esgValues["name"];
     dynamic newValue = esgValues["newValue"];
+    String esgKey = esgValues["esgKey"];
 
-    DatabaseReference ref = _database.ref("managers/${widget.creatorId}/esgData/$category/$subCategory");
+    DatabaseReference ref = _database.ref("managers/${widget.creatorId}/esgData/$category/$subCategory/$esgKey");
 
     ref.update({"Initial Value": newValue}).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/dashboarditems.dart';
+import '../widgets/EsgPopup.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -12,6 +16,35 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final List dashboardItems = getDashboardItems();
+  String? _creatorId;
+  String? _role;
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseDatabase _database = FirebaseDatabase.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCreatorId();
+  }
+
+  void _fetchCreatorId() async {
+    if (_currentUser == null) return;
+
+    DocumentSnapshot userDoc = await _firestore.collection("users").doc(_currentUser!.uid).get();
+    if (userDoc.exists) {
+      setState(() {
+        _role = userDoc["role"];
+      });
+      setState(() {
+        if(userDoc["role"] == "MANAGER") {
+          _creatorId = _currentUser!.uid;
+        } else {
+          _creatorId = userDoc["creator"];
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +61,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             final item = dashboardItems[index];
             return GestureDetector(
               onTap: () {
-                print("Clicked: ${item['name']}");
+                showDialog(
+                  context: context,
+                  builder: (context) => EsgPopup(creatorId: _creatorId),
+                );
               },
               child: Card(
                 shape: RoundedRectangleBorder(
