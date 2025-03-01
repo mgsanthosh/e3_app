@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/esgGoalsAndTargets.dart';
+import 'ApprovalsScreen.dart';
 
 class MeasurableScreen extends StatefulWidget {
   @override
@@ -102,6 +103,20 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
     );
   }
 
+  void _redirectToApprovalsScreen(String creatorId, String role, dynamic esgDetails, String category) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ApprovalsScreen(
+          creatorId: creatorId,
+          role: role,
+          esgDetails: esgDetails,
+          category: category,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,6 +159,8 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                 String startDate = esgDetails["Start Date"]?.toString() ?? "N/A";
                 String endDate = esgDetails["Deadline"]?.toString() ?? "N/A";
                 String status = getStatus(esgDetails);
+                String baselineValue = esgDetails["Baseline Value"]?.toString() ?? "N/A";
+                String initialValue = esgDetails["Initial Value"]?.toString() ?? "N/A";
 
                 return Card(
                   margin: EdgeInsets.symmetric(vertical: 8),
@@ -158,6 +175,9 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                         SizedBox(height: 5),
                         Text("Start: $startDate  |  End: $endDate", style: TextStyle(color: Colors.grey[700])),
                         SizedBox(height: 10),
+                        Text("Baseline Value: $baselineValue"),
+                        SizedBox(height: 10),
+                        Text("Current Value: $initialValue"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -171,7 +191,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                               labelStyle: TextStyle(color: Colors.white),
                             ),
                             _role == "MANAGER" ? ElevatedButton(
-                              onPressed: () => {},
+                              onPressed: () => _redirectToApprovalsScreen(_creatorId!, _role!, esgDetails, name),
                               child: Text("Approvals"),
                             ) :ElevatedButton(
                               onPressed: () => _showContributionPopup(context, _selectedCategory!, name, esgDetails),

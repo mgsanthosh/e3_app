@@ -45,9 +45,6 @@ List<dynamic> getUserPermissions(String role) {
             ]
           },
         ]
-      },
-      {
-        "name": "ESG Audit",
       }
     ];
   } else {
