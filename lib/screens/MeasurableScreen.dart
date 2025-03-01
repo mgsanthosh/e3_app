@@ -20,6 +20,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
 
 
   String? _creatorId;
+  String? _role;
   Map<String, dynamic> _esgData = {};
   String? _selectedCategory;
 
@@ -36,7 +37,14 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
     DocumentSnapshot userDoc = await _firestore.collection("users").doc(_currentUser!.uid).get();
     if (userDoc.exists) {
       setState(() {
-        _creatorId = userDoc["creator"];
+        _role = userDoc["role"];
+      });
+      setState(() {
+        if(userDoc["role"] == "MANAGER") {
+          _creatorId = _currentUser!.uid;
+        } else {
+          _creatorId = userDoc["creator"];
+        }
       });
       _fetchEsgData();
     }
@@ -162,7 +170,10 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                                   : Colors.grey,
                               labelStyle: TextStyle(color: Colors.white),
                             ),
-                            ElevatedButton(
+                            _role == "MANAGER" ? ElevatedButton(
+                              onPressed: () => {},
+                              child: Text("Approvals"),
+                            ) :ElevatedButton(
                               onPressed: () => _showContributionPopup(context, _selectedCategory!, name, esgDetails),
                               child: Text("Contribute"),
                             ),
@@ -259,6 +270,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                         // });
                         // Navigator.pop(context);
                         _saveAllEsgDataToApprovals(category, name,esgDetails, carbonFootprint);
+                        Navigator.pop(context);
                       },
                       child: Text("Save"),
                     ),
