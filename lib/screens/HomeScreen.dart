@@ -4,6 +4,7 @@ import 'package:e3_app/screens/EsgGoalsAndTargetsScreen.dart';
 import 'package:e3_app/screens/LocationScreen.dart';
 import 'package:e3_app/screens/NonMeasurableScreen.dart';
 import 'package:e3_app/screens/RegionScreen.dart';
+import 'package:e3_app/screens/ReportScreen.dart';
 import 'package:e3_app/screens/UserScreen.dart';
 import 'package:e3_app/services/auth_service.dart';
 import 'package:e3_app/widgets/SideNav.dart';
@@ -98,6 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return MeasurableScreen();
       case "Non Measurable":
         return NonMeasurableScreen();
+      case "Report Generation":
+        return ReportScreen();
       default:
         return Center(child: Text("Home View", style: TextStyle(fontSize: 20)));
     }

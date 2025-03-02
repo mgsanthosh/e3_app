@@ -45,6 +45,9 @@ List<dynamic> getUserPermissions(String role) {
             ]
           },
         ]
+      },
+      {
+        "name": "Report Generation"
       }
     ];
   } else {
@@ -61,6 +64,9 @@ List<dynamic> getUserPermissions(String role) {
             ]
           },
         ]
+      },
+      {
+        "name": "Report Generation"
       }
     ];
   }

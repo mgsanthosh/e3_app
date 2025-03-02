@@ -49,7 +49,14 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
       // );
     });
   }
+  String getStatus(String baseLine, String newValue) {
+    double initialValue = double.tryParse(newValue?.toString() ?? "0") ?? 0;
+    double baselineValue = double.tryParse(baseLine?.toString() ?? "0") ?? 0;
 
+    if (initialValue == 0) return "Created";
+    if (initialValue > 0 && initialValue < baselineValue) return "InProgress";
+    return "Completed";
+  }
   void _approveValue(dynamic esgValues, int index) {
     String category = esgValues["category"];
     String subCategory = esgValues["name"];
@@ -58,7 +65,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
 
     DatabaseReference ref = _database.ref("managers/${widget.creatorId}/esgData/$category/$subCategory/$esgKey");
 
-    ref.update({"Initial Value": newValue}).then((_) {
+    ref.update({"Initial Value": newValue, "status": getStatus(esgValues["baselineValue"], newValue)}).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Approval successful: Initial value updated.")),
       );
