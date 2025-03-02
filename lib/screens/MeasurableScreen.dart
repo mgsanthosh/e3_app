@@ -55,6 +55,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
 
   // Fetch ESG Data from Realtime Database
   void _fetchEsgData() {
+    print("FECTHING THE FETCH ESG DATA " + _esgData.toString());
     if (_creatorId == null) return;
     _database.ref("managers/$_creatorId/esgData").onValue.listen((event) {
       final data = event.snapshot.value as Map<dynamic, dynamic>?;
@@ -185,11 +186,7 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     child: Padding(
                       padding: EdgeInsets.all(12),
-                      child: GestureDetector(
-                        onTap: () => {
-                          // _redirectToMeasurableDetailsScreen(esgDetails)
-                        },
-                        child: Column(
+                      child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -224,7 +221,6 @@ class _MeasurableScreenState extends State<MeasurableScreen> {
                             // ),
                           ],
                         ),
-                      ),
                     ),
                   ),
                 );

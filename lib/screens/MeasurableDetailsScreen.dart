@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import 'MeasurableScreen.dart';
+
 class MeasurableDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> esgData;
   final String selectedCategory;
@@ -54,7 +56,7 @@ class _MeasurableDetailsScreenState extends State<MeasurableDetailsScreen> {
   }
 
   void _redirectToApprovalsScreen(String creatorId, String role, dynamic esgDetails, String category) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => ApprovalsScreen(
@@ -71,11 +73,17 @@ class _MeasurableDetailsScreenState extends State<MeasurableDetailsScreen> {
   }
 
   void _handleBackFromApprovalsScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MeasurableScreen(),
+      ),
+    );
     // Perform any state updates here
-    setState(() {
-      // Example: Refresh data if needed
-      _fetchCreatorId();
-    });
+    // setState(() {
+    //   // Example: Refresh data if needed
+    //   widget.onFetchEsgData();
+    // });
   }
 
   @override
