@@ -27,27 +27,44 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.text = "test@123";
   }
 
-
   void _signInWithEmail() async {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
-    if (email.isNotEmpty && password.isNotEmpty) {
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Email and Password cannot be empty")),
+      );
+      return;
+    }
+
+    try {
       User? user = await _authService.signInWithEmail(email, password);
       if (user != null) {
+        if (!mounted) return;
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => HomeScreen()));
-        SharedPrefService.saveUserEmail(email);
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+        await SharedPrefService.saveUserEmail(email);
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Login Failed")));
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login Failed")),
+        );
       }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF1F6EB), // Light greenish background
+      backgroundColor: const Color(0xFFF1F6EB), // Light greenish background
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -56,14 +73,15 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset('assets/logo.png', height: 80), // e3 Logo
-                SizedBox(height: 10),
-                Text(
+                Image.asset('assets/logo.png', height: 80, errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.image_not_supported, size: 80, color: Colors.grey);
+                }), // e3 Logo with error handling
+                const SizedBox(height: 10),
+                const Text(
                   "Welcome",
-                  style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Email TextField
                 TextField(
@@ -73,13 +91,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: "User Name",
-                    prefixIcon: Icon(Icons.person, color: Colors.green),
+                    prefixIcon: const Icon(Icons.person, color: Colors.green),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 // Password TextField
                 TextField(
@@ -89,11 +107,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: "Password",
-                    prefixIcon: Icon(Icons.lock, color: Colors.green),
+                    prefixIcon: const Icon(Icons.lock, color: Colors.green),
                     suffixIcon: IconButton(
                       icon: Icon(
-                          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                          color: Colors.green),
+                        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                        color: Colors.green,
+                      ),
                       onPressed: () {
                         setState(() {
                           _isPasswordVisible = !_isPasswordVisible;
@@ -105,11 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
-
-
-
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Login Button
                 SizedBox(
@@ -118,22 +133,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: _signInWithEmail,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
-                      padding: EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                    child: Text("Login", style: TextStyle(fontSize: 18, color: Colors.white)),
+                    child: const Text("Login", style: TextStyle(fontSize: 18, color: Colors.white)),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 // Powered by
-                Text("Powered by Atominos", style: TextStyle(color: Colors.grey)),
+                const Text("Powered by Atominos", style: TextStyle(color: Colors.grey)),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

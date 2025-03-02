@@ -39,71 +39,79 @@ class _HomeScreenState extends State<HomeScreen> {
   void _getCurrentUser() async {
     final user = _authService.getCurrentUser();
     final userRole = await _authService.getUserRole();
-    setState(() {
-      _currentUser = user;
-      role = userRole;
-    });
+
+    if (mounted) {
+      setState(() {
+        _currentUser = user;
+        role = userRole;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(selectedScreen.toUpperCase()),backgroundColor:Colors.green,titleTextStyle: TextStyle(fontSize: 20,color: Colors.white),),
-      drawer: SideNav(
+      appBar: AppBar(
+        title: Text(selectedScreen.toUpperCase()),
+        backgroundColor: Colors.green,
+        titleTextStyle: const TextStyle(fontSize: 20, color: Colors.white),
+      ),
+      drawer: _currentUser != null && role != null
+          ? SideNav(
         role: role!,
         user: _currentUser!,
         onMenuSelected: (menu) {
-          print("THE MENU " + menu);
+          debugPrint("THE MENU $menu");
           setState(() {
-            selectedScreen = menu; // Update view dynamically
+            selectedScreen = menu;
           });
         },
-      ),
+      )
+          : null, // Prevents passing null to SideNav
       body: Container(
         color: Colors.green[100],
         child: getScreen(selectedScreen),
-      )
+      ),
     );
   }
 
   Widget getScreen(String screenName) {
     switch (screenName) {
       case "Dashboard":
-        return DashboardScreen();
+        return const DashboardScreen();
       case "Master Data":
-        return Center(
+        return const Center(
             child: Text("Master Data View", style: TextStyle(fontSize: 20)));
       case "User Management":
-        return Center(
-            child:
-                Text("User Management View", style: TextStyle(fontSize: 20)));
+        return const Center(
+            child: Text("User Management View", style: TextStyle(fontSize: 20)));
       case "Locations":
-        return LocationScreen();
+        return  LocationScreen();
       case "Departments":
-        return DepartmentScreen();
+        return  DepartmentScreen();
       case "Countries":
-        return CountryScreen();
+        return  CountryScreen();
       case "Regions":
-        return RegionScreen();
+        return  RegionScreen();
       case "Roles":
-        return RoleScreen();
+        return  RoleScreen();
       case "Users":
-        return UserScreen(mode: "manager");
+        return  UserScreen(mode: "manager");
       case "ESG Audit":
-        return Center(
+        return  Center(
             child: Text("ESG Audit View", style: TextStyle(fontSize: 20)));
       case "ESG Goals and Targets":
-        return EsgGoalsAndTargetScreen();
+        return  EsgGoalsAndTargetScreen();
       case "Contributors":
-        return UserScreen(mode: "contributor");
+        return  UserScreen(mode: "contributor");
       case "Measurable":
-        return MeasurableScreen();
+        return  MeasurableScreen();
       case "Non Measurable":
-        return NonMeasurableStaticScreen();
+        return  NonMeasurableStaticScreen();
       case "Report Generation":
-        return ReportScreen();
+        return  ReportScreen();
       default:
-        return Center(child: Text("Home View", style: TextStyle(fontSize: 20)));
+        return  Center(child: Text("Home View", style: TextStyle(fontSize: 20)));
     }
   }
 }
