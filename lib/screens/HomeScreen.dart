@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 
 import 'CountryScreen.dart';
 import 'MeasurableScreen.dart';
+import 'NonMeasurableStaticScreen.dart';
 import 'RoleScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case "Measurable":
         return MeasurableScreen();
       case "Non Measurable":
-        return NonMeasurableScreen();
+        return NonMeasurableStaticScreen();
       case "Report Generation":
         return ReportScreen();
       default:
