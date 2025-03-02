@@ -63,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onTap: () {
                 showDialog(
                   context: context,
-                  builder: (context) => EsgPopup(creatorId: _creatorId),
+                  builder: (context) => EsgPopup(creatorId: _creatorId, item: item),
                 );
               },
               child: Card(

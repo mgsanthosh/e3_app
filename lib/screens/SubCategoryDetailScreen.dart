@@ -34,6 +34,15 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
     _fetchSavedData();
   }
 
+  String getStatus(Map<String, dynamic> esgDetails) {
+    double initialValue = double.tryParse(esgDetails["Initial Value"]?.toString() ?? "0") ?? 0;
+    double baselineValue = double.tryParse(esgDetails["Baseline Value"]?.toString() ?? "0") ?? 0;
+
+    if (initialValue == 0) return "Created";
+    if (initialValue > 0 && initialValue < baselineValue) return "InProgress";
+    return "Completed";
+  }
+
   /// Fetch dynamic data from Firebase based on form fields
   void _fetchDynamicFirebaseData() {
     List<dynamic> formFields = getAddGoalForm();
@@ -243,11 +252,11 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
   Color _getStatusColor(String? status) {
     switch (status?.toLowerCase()) {
       case "created":
-        return Colors.green;
+        return Colors.grey;
       case "inprogress":
         return Colors.orange;
       case "completed":
-        return Colors.red;
+        return Colors.green;
       default:
         return Colors.grey; // Default color for unknown status
     }
@@ -293,10 +302,10 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
                   ),
                   Chip(
                     label: Text(
-                      formData["status"] ?? "No status",
+                      getStatus(formData) ?? "No status",
                       style: const TextStyle(color: Colors.white),
                     ),
-                    backgroundColor: _getStatusColor(formData["status"]),
+                    backgroundColor: _getStatusColor(getStatus(formData)),
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   ),
                 ],
