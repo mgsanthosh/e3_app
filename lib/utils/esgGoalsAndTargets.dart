@@ -113,19 +113,28 @@ List<dynamic> getAddGoalForm() {
           "Placeholder": "Select Type",
           "fromFirebase": false,
           "options": ["Measurable", "NonMeasurable"],
-          "value": "Measurable"
+          "value": "Measurable",
+          "displayOnlyFor": "All"
         },
         {
           "type": "text",
           "Placeholder": "Description",
-          "value": "description"
+          "value": "description",
+          "displayOnlyFor": "All"
+        },
+        {
+          "type": "non-measurable-text",
+          "Placeholder": "Disclosure Info",
+          "value": "disclosureInfo",
+          "displayOnlyFor": "NonMeasurable"
         },
         {
           "type": "dropdown",
           "Placeholder": "Department",
           "fromFirebase": true,
           "databaseName": "departments",
-          "value": "departments"
+          "value": "departments",
+          "displayOnlyFor": "All"
         }
       ]
     },
@@ -135,19 +144,22 @@ List<dynamic> getAddGoalForm() {
         {
           "type": "date",
           "Placeholder": "Start Date",
-          "value": "startDate"
+          "value": "startDate",
+          "displayOnlyFor": "All"
         },
         {
           "type": "date",
           "Placeholder": "Deadline",
-          "value": "Deadline"
+          "value": "Deadline",
+          "displayOnlyFor": "All"
         },
         {
           "type": "dropdown",
           "Placeholder": "Select Tracking Frequency",
           "fromFirebase": false,
           "options": ["Daily", "Weekly", "Monthly", "Quarterly", "Annually"],
-          "value": "trackingFreq"
+          "value": "trackingFreq",
+          "displayOnlyFor": "All"
         }
       ]
     },
@@ -159,14 +171,16 @@ List<dynamic> getAddGoalForm() {
           "Placeholder": "Select Scope",
           "fromFirebase": false,
           "options": ["Country"],
-          "value": "scope"
+          "value": "scope",
+          "displayOnlyFor": "All"
         },
         {
           "type": "dropdown",
           "Placeholder": "Select Country",
           "fromFirebase": true,
           "databaseName": "countries",
-          "value": "countries"
+          "value": "countries",
+          "displayOnlyFor": "All"
         },
       ]
     },
@@ -176,12 +190,14 @@ List<dynamic> getAddGoalForm() {
         {
           "type": "text",
           "Placeholder": "Baseline Value",
-          "value": "baseline"
+          "value": "baseline",
+          "displayOnlyFor": "All"
         },
         {
           "type": "text",
           "Placeholder": "Initial Value",
-          "value": "initial"
+          "value": "initial",
+          "displayOnlyFor": "All"
         },
       ]
     }

@@ -25,6 +25,7 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
   Map<String, dynamic> formData = {}; // Stores user inputs
   bool isLoading = true;
   List< Map<String, dynamic>> formDataList = [];
+  List<String> formDataLogs = [];
   @override
   void initState() {
     super.initState();
@@ -139,7 +140,7 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
                       String placeholder = input["Placeholder"];
                       String? databaseName = input["databaseName"];
                       bool fromFirebase = input["fromFirebase"] ?? false;
-
+                      print(formDataLogs);
                       if (input["type"] == "radio") {
                         return Column(
                           children: input["options"].map<Widget>((option) {
@@ -162,7 +163,16 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
                             formData[placeholder] = value;
                           },
                         );
-                      } else if (input["type"] == "dropdown") {
+                      } else if( input["type"] == "non-measurable-text") {
+                        return TextField(
+                          decoration: InputDecoration(hintText: placeholder),
+                          onChanged: (value) {
+                            formData[placeholder] = value;
+
+                          },
+                        );
+                      }
+                      else if (input["type"] == "dropdown") {
                         return DropdownButtonFormField<String>(
                           decoration: InputDecoration(hintText: placeholder),
                           value: formData[placeholder] ?? null, // Ensure null safety
@@ -179,6 +189,11 @@ class _SubCategoryDetailScreenState extends State<SubCategoryDetailScreen> {
                           onChanged: (value) {
                             if (value != null) {
                               formData[placeholder] = value;
+                              setState(() {
+                                formDataLogs.add(value);
+                                print("Goal Pop up data " + formDataLogs.toString());
+
+                              });
                             }
                           },
                         );
